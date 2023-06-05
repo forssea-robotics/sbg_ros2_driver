@@ -14,6 +14,7 @@ find_package(tf2_msgs REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(Boost REQUIRED)
+find_package(geographic_msgs REQUIRED)
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -31,6 +32,7 @@ set (USED_LIBRARIES
   tf2_ros
   tf2_msgs
   tf2_geometry_msgs
+  geographic_msgs
 )
 
 set (msg_files
@@ -70,6 +72,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
     std_msgs
     geometry_msgs
     builtin_interfaces
+    geographic_msgs
 )
 
 ament_export_dependencies(rosidl_default_runtime)
@@ -119,8 +122,9 @@ target_link_libraries(sbg_device_mag ${catkin_LIBRARIES} sbgECom)
 ament_target_dependencies(sbg_device ${USED_LIBRARIES}) 
 ament_target_dependencies(sbg_device_mag ${USED_LIBRARIES})
 
-rosidl_target_interfaces(sbg_device ${PROJECT_NAME} "rosidl_typesupport_cpp")
-rosidl_target_interfaces(sbg_device_mag ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+target_link_libraries(sbg_device "${cpp_typesupport_target}")
+target_link_libraries(sbg_device_mag "${cpp_typesupport_target}")
 
 set_property(TARGET sbg_device PROPERTY CXX_STANDARD 14)
 set_property(TARGET sbg_device_mag PROPERTY CXX_STANDARD 14)
